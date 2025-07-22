@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
 class RoleSeeder extends Seeder
@@ -13,13 +14,45 @@ class RoleSeeder extends Seeder
      */
     public function run(): void
     {
-        $roleData = ["Admin", "client", "preparateur"];
+        $data = [
+            [
+                "role_name" => "Admin",
+                "permission_name" => "manage category"
+            ],
+            [
+                "role_name" => "Admin",
+                "permission_name" => "manage produit"
+            ],
+            [
+                "role_name" => "Admin",
+                "permission_name" => "manage commande"
+            ],
+            [
+                "role_name" => "preparateur",
+                "permission_name" => "view commande a traiter"
+            ],
+        ];
 
-        foreach($roleData as $role)
-        {
-            Role::create([
-                "name" => $role
-            ]);
+        foreach ($data as $item) {
+
+            $role = Role::firstOrCreate(
+                [
+                    "name" => $item['role_name']
+                ]
+            );
+
+            $permission = Permission::firstOrCreate(
+                [
+                    "name" => $item['permission_name']
+                ]
+            );
+
+            $role->givePermissionTo($permission);
         }
+
+        Role::firstOrCreate([
+            "name" => "client"
+        ]);
+
     }
 }
