@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Category\CategoryStoreRequest;
@@ -18,7 +18,7 @@ class CategoryController extends Controller
             $categories = CategoryRessource::collection(Category::latest()->get());
 
             return response()->json([
-                'sucess' => true,
+                'success' => true,
                 'message' => 'La liste des catégories',
                 'data' => $categories
             ]);
@@ -38,14 +38,14 @@ class CategoryController extends Controller
 
         if (!$category) {
             return response()->json([
-                'sucess' => false,
+                'success' => false,
                 'message' => 'Categorie introuvable',
             ]);
         }
 
 
         return response()->json([
-            'sucess' => true,
+            'success' => true,
             'message' => 'Catégorie trouvée',
             'data' => $category
         ]);
@@ -63,13 +63,13 @@ class CategoryController extends Controller
             // Erreur lors de l'insertion
             if (!$Category) {
                 return response()->json([
-                    'sucess' => false,
+                    'success' => false,
                     'message' => 'Erreur survenue lors de l\'insertion',
                 ]);
             }
 
             return response()->json([
-                'sucess' => true,
+                'success' => true,
                 'message' => 'Catégorie crée',
                 'data' => $Category
             ]);
@@ -90,7 +90,7 @@ class CategoryController extends Controller
 
             if (!$category) {
                 return response()->json([
-                    'sucess' => false,
+                    'success' => false,
                     'message' => 'Categorie introuvable',
                 ]);
             }
@@ -101,7 +101,7 @@ class CategoryController extends Controller
             $category->update($data);
 
             return response()->json([
-                'sucess' => true,
+                'success' => true,
                 'message' => 'Catégorie modifiée',
                 'data' => $category
             ]);
@@ -122,7 +122,7 @@ class CategoryController extends Controller
 
             if (!$category) {
                 return response()->json([
-                    'sucess' => false,
+                    'success' => false,
                     'message' => 'Categorie introuvable',
                 ]);
             }
@@ -131,7 +131,7 @@ class CategoryController extends Controller
             $category->delete();
 
             return response()->json([
-                'sucess' => true,
+                'success' => true,
                 'message' => 'Catégorie supprimée',
                 'data' => []
             ]);
