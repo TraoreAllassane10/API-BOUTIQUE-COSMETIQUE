@@ -3,10 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\User;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserLoginRequest;
-use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\UserRegisterRequest;
 use Exception;
 use Illuminate\Support\Facades\Auth;
@@ -57,7 +55,7 @@ class UserController extends Controller
                 $user = Auth::user();
 
                 //Creation de l'utilisateur connecté
-                $token = $user->createToken(env("SECRET_KEY_API"))->plainTextToken;
+                $token = $user->createToken($user->id)->plainTextToken;
 
                 return response()->json([
                     'success' => true,
