@@ -21,7 +21,6 @@ class CategoryService
             // Recuperation de toutes les categorie
             $categories = $this->categoryRespository->all();
 
-            // CategoryRessource::collection(Category::latest()->get())
             return response()->json([
                 'success' => true,
                 'message' => 'La liste des catégories',
