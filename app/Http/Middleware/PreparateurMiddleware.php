@@ -4,28 +4,29 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class ManageByAdminMiddleware
+class PreparateurMiddleware
 {
     /**
      * Handle an incoming request.
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next): Response
     {
-        $permission = $request->user()->can(['manage produit']);
+        //Cette variable nous permettra de verifier si l'utlisateur est un admin puisque c'est un admin qui 'manage produit"
+        $permission = $request->user()->can(['manage produit']) || $request->user()->can(["view commande a traiter"]);
 
-        if (!$permission)
-        {
+        // $permissonPreparateur = $request->user()->can(["view commande a traiter"]);
+
+        if (!$permission) {
             return response()->json([
                 "success" => false,
                 "message" => "Vous n'etes pas autorisé à acceder à cette ressource"
             ]);
         }
-       
+
         return $next($request);
     }
 }

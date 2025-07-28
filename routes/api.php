@@ -5,13 +5,14 @@ use App\Http\Controllers\Api\Admin\CommandeManageController;
 use App\Http\Controllers\Api\Admin\ProductController;
 use App\Http\Controllers\Api\Client\CommandeClientController;
 use App\Http\Controllers\Api\Client\ProductClientController;
+use App\Http\Controllers\Api\Preparateur\PreparateurController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/register', [UserController::class, 'register'])->name('register');
 Route::post('/login', [UserController::class, 'login'])->name('login');
 
-Route::controller(ProductClientController::class)->group(function() {
+Route::controller(ProductClientController::class)->group(function () {
     Route::get('/products', 'index')->name('products');
     Route::get('/products/{product}', 'show')->name('products.show');
 });
@@ -20,7 +21,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/commandes/process', [CommandeClientController::class, 'process'])->name("commandes.process");
     Route::get('/commandes/historique', [CommandeClientController::class, 'historique'])->name("commandes.historique");
-    
+
     Route::middleware("manager")->group(function () {
         // Routes de gestion des categories
         Route::get('/admin/categories', [CategoryController::class, "index"])->name('admin.categories');
@@ -39,11 +40,16 @@ Route::middleware('auth:sanctum')->group(function () {
         });
 
         //Routes de gestion des commandes
-        Route::controller(CommandeManageController::class)->group(function() {
+        Route::controller(CommandeManageController::class)->group(function () {
             Route::get('/admin/commandes', 'index')->name('commandes');
             Route::put('/admin/commandes/{commande}/status', 'updateStatus')->name('commandes.updateStatus');
             Route::delete('/admin/commandes/{commande}', 'delete')->name('commandes.delete');
         });
+    });
+
+    // Visualisation des commandes à traitée
+    Route::middleware('preparateur')->group(function () {
+        Route::get("/preparateurs", [PreparateurController::class, "commandeATraitee"])->name('preparateur.commande');
     });
 
 
