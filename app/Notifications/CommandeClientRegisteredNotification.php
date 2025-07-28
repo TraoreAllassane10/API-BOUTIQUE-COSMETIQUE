@@ -36,7 +36,7 @@ class CommandeClientRegisteredNotification extends Notification
         return (new MailMessage)
             ->line('Bonjour ' . $notifiable->name . ',')
             ->line('Votre commande a bien été reçue !')
-            ->line('Montant de la commande : ', $this->commande->monatnt);
+            ->line('Montant de la commande : ', $this->commande->montant);
     }
 
     /**
