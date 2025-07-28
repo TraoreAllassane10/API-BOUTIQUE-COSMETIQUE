@@ -47,7 +47,7 @@ Route::middleware('auth:sanctum')->group(function () {
         });
     });
 
-    // Visualisation des commandes à traitée
+    // Visualisation des commandes à traitée (en cours) par les admins et les preparateurs
     Route::middleware('preparateur')->group(function () {
         Route::get("/preparateurs", [PreparateurController::class, "commandeATraitee"])->name('preparateur.commande');
     });

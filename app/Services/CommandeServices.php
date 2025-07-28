@@ -4,6 +4,8 @@ namespace App\Services;
 
 use Exception;
 use App\Models\Commande;
+use App\Models\User;
+use App\Notifications\EditCommandeStatusByAdminNotification;
 
 class CommandeServices
 {
@@ -45,6 +47,9 @@ class CommandeServices
             $commande->statut = $request->statut;
 
             $commande->save();
+
+            $user = User::find($commande->user_id);
+            $user->notify(new EditCommandeStatusByAdminNotification($commande));
 
             return response()->json([
                 'success' => true,
