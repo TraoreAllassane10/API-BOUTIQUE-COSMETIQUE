@@ -2,9 +2,9 @@
 
 use App\Http\Controllers\Api\Admin\CategoryController;
 use App\Http\Controllers\Api\Admin\ProductController;
+use App\Http\Controllers\Api\Client\CommandeClientController;
 use App\Http\Controllers\Api\Client\ProductClientController;
 use App\Http\Controllers\Api\UserController;
-use App\Http\Middleware\ManageByAdminMiddleware;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/register', [UserController::class, 'register'])->name('register');
@@ -16,6 +16,9 @@ Route::controller(ProductClientController::class)->group(function() {
 });
 
 Route::middleware('auth:sanctum')->group(function () {
+
+    Route::post('/commandes/process', [CommandeClientController::class, 'process'])->name("commandes.process");
+    Route::get('/commandes/historique', [CommandeClientController::class, 'historique'])->name("commandes.historique");
     
     Route::middleware("manager")->group(function () {
         // Routes categorie
