@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\DTO\CreateCategoryDTO;
+use App\DTO\UpdateCategoryDTO;
 use Exception;
 use App\Repositories\CategoryRespository;
 use App\Http\Requests\Category\CategoryStoreRequest;
@@ -62,14 +64,14 @@ class CategoryService
         }
     }
 
-    public function create(CategoryStoreRequest $request)
+    public function create(CreateCategoryDTO $dto)
     {
         try {
-            // Recuperation de la donnée vaidée
-            $data = $request->validated();
 
             //Creation de la categorie
-            $Category = $this->categoryRespository->create($data);
+            $Category = $this->categoryRespository->create([
+                "nom" => $dto->nom
+            ]);
 
             // Erreur lors de l'insertion
             if (!$Category) {
@@ -93,7 +95,7 @@ class CategoryService
         }
     }
 
-    public function update(string $id, CategoryStoreRequest $request)
+    public function update(string $id, UpdateCategoryDTO $dto)
     {
         try {
 
@@ -106,10 +108,9 @@ class CategoryService
                 ]);
             }
 
-            // Recuperation de la donnée vaidée
-            $data = $request->validated();
-
-            $categoryModifie = $this->categoryRespository->update($category, $data);
+            $categoryModifie = $this->categoryRespository->update($category, [
+                "nom" => $dto->nom
+            ]);
 
             return response()->json([
                 'success' => true,
@@ -127,7 +128,7 @@ class CategoryService
 
     public function delete(string $id)
     {
-         try {
+        try {
 
             $category = $this->categoryRespository->find($id);
 

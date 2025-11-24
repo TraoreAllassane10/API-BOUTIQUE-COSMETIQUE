@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers\Api\Admin;
 
-use Exception;
-use App\Models\Product;
+use App\DTO\Product\CreateProductDTO;
+use App\DTO\Product\UpdateProductDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Product\ProductStoreRequest;
-use App\Http\Resources\ProductRessource;
-use App\Repositories\ProductRespository;
 use App\Services\ProductService;
 use Illuminate\Http\Request;
 
@@ -29,12 +27,22 @@ class ProductController extends Controller
 
     public function store(ProductStoreRequest $request)
     {
-        return $this->productService->create($request);
+        $data = $request->validated();
+
+        // Création d'un objet DTO
+        $dto = new CreateProductDTO($data['nom'], $data['description'], $data['prix'], $data['stock'], $data['image'], $data['category_id']);
+
+        return $this->productService->create($dto);
     }
 
     public function update(ProductStoreRequest $request, string $id)
     {
-       return $this->productService->update($request, $id);
+        $data = $request->validated();
+
+        // Création d'un objet DTO
+        $dto = new UpdateProductDTO($data['nom'], $data['description'], $data['prix'], $data['stock'], $data['image'], $data['category_id']);
+        
+        return $this->productService->update($dto, $id);
     }
 
     public function delete(string $id)

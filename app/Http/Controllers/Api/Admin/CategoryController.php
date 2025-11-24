@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api\Admin;
 
+use App\DTO\CreateCategoryDTO;
+use App\DTO\UpdateCategoryDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Category\CategoryStoreRequest;
 use App\Services\CategoryService;
@@ -11,8 +13,7 @@ class CategoryController extends Controller
 {
     public function __construct(
         public CategoryService $categoryService
-    )
-    {}
+    ) {}
 
     public function index()
     {
@@ -26,12 +27,24 @@ class CategoryController extends Controller
 
     public function store(CategoryStoreRequest $request)
     {
-       return $this->categoryService->create($request);
+        // Recuperation de la donnée vaidée
+        $data = $request->validated();
+
+        // Creation d'un objet DTO
+        $dto = new CreateCategoryDTO($data["nom"]);
+
+        return $this->categoryService->create($dto);
     }
 
     public function update(CategoryStoreRequest $request, string $id)
     {
-        return $this->categoryService->update($id, $request);
+        // Recuperation de la donnée vaidée
+        $data = $request->validated();
+
+         // Creation d'un objet DTO
+        $dto = new UpdateCategoryDTO($data["nom"]);
+
+        return $this->categoryService->update($id, $dto);
     }
 
     public function delete(string $id)

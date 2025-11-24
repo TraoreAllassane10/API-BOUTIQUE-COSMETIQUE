@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\DTO\Product\CreateProductDTO;
+use App\DTO\Product\UpdateProductDTO;
 use App\Http\Requests\Product\ProductStoreRequest;
 use Exception;
 use App\Repositories\ProductRespository;
@@ -62,12 +64,18 @@ class ProductService
         }
     }
 
-    public function create(ProductStoreRequest $request)
+    public function create(CreateProductDTO $dto)
     {
         try {
-            $data = $request->validated();
 
-            $product = $this->productRespository->create($data);
+            $product = $this->productRespository->create([
+                "nom" => $dto->nom,
+                "description" => $dto->description,
+                "prix" => $dto->prix,
+                "stock" => $dto->stock,
+                "image" => $dto->image,
+                "category_id" => $dto->category_id
+            ]);
 
             // Erreur lors de l'insertion
             if (!$product) {
@@ -91,7 +99,7 @@ class ProductService
         }
     }
 
-    public function update(ProductStoreRequest $request, string $id)
+    public function update(UpdateProductDTO $dto, string $id)
     {
         try {
             $product = $this->productRespository->find($id);
@@ -103,10 +111,15 @@ class ProductService
                 ]);
             }
 
-            // Recuperation de la donnée vaidée
-            $data = $request->validated();
 
-            $product = $this->productRespository->update($product, $data);
+            $product = $this->productRespository->update($product, [
+                "nom" => $dto->nom,
+                "description" => $dto->description,
+                "prix" => $dto->prix,
+                "stock" => $dto->stock,
+                "image" => $dto->image,
+                "category_id" => $dto->category_id
+            ]);
 
             return response()->json([
                 'success' => true,
