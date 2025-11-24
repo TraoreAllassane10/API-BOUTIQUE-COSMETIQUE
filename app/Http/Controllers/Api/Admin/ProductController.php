@@ -37,11 +37,12 @@ class ProductController extends Controller
 
     public function update(ProductStoreRequest $request, string $id)
     {
+        // Recuperation de la donnée vaidée
         $data = $request->validated();
 
         // Création d'un objet DTO
         $dto = new UpdateProductDTO($data['nom'], $data['description'], $data['prix'], $data['stock'], $data['image'], $data['category_id']);
-        
+
         return $this->productService->update($dto, $id);
     }
 
